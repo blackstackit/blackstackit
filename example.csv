@@ -1,0 +1,11 @@
+measurement,sensor,time_user,time_system,time_idle,time
+presion,sensor0,42,42,42,2019-12-13T13:03:28Z
+presion,sensor0,50,50,50,2019-12-14T13:03:28Z
+presion,sensor0,60,60,60,2019-12-15T13:03:28Z
+presion,sensor0,70,70,70,2019-12-16T13:03:28Z
+presion,sensor0,80,80,80,2019-12-17T13:03:28Z
+presion,sensor0,90,90,90,2019-12-18T13:03:28Z
+presion,sensor0,100,100,100,2019-12-19T13:03:28Z
+presion,sensor0,110,110,110,2019-12-20T13:03:28Z
+presion,sensor0,120,120,120,2019-12-21T13:03:28Z
+presion,sensor0,130,130,130,2019-12-22T13:03:28Z
