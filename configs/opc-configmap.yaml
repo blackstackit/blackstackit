@@ -1,0 +1,53 @@
+apiVersion: v1
+data:
+  config.toml: |
+    [input]
+    url             = "opc.tcp://opcua.demo-this.com:51210/UA/SampleServer"
+    failoverTimeout = 5000 # time to wait before reconnection in case of failure
+
+    [output]
+    name             = "influx"
+    type             = "influxdb"
+    host             = "influxdb"
+    port             = 8086
+    protocol         = "http"
+    username         = ""
+    password         = ""
+    database         = "dbTesting"
+    failoverTimeout  = 10000
+    bufferMaxSize    = 64
+    writeInterval    = 3000
+    writeMaxPoints   = 1000
+
+    # A polled node:
+    [[measurements]]
+    name               = "Int32polled"
+    dataType           = "number"
+    tags               = { tag1 = "test", tag2 = "AB43" }
+    nodeId             = "ns=37;s=10849"
+    collectionType     = "polled"
+    pollRate           = 60     # samples / minute.
+    deadbandAbsolute   = 0      # Absolute max difference for a value not to be collected
+    deadbandRelative   = 0.0    # Relative max difference for a value not to be collected
+
+    # A monitored node
+    [[measurements]]
+    name               = "Int32monitored"
+    dataType           = "number"
+    tags               = { tag1 = "test", tag2 = "AB43" }
+    nodeId             = "ns=2;i=10849"
+    collectionType     = "monitored"
+    monitorResolution  = 1000    # ms
+    deadbandAbsolute   = 0          # Absolute max difference for a value not to be collected
+    deadbandRelative   = 0          # Relative max difference for a value not to be collected
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"config.toml":"[input]\n  url             = \"opc.tcp://opcua.demo-this.com:51210/UA/SampleServer\"\n  failoverTimeout = 5000     # time to wait before reconnection in case of failure\n  In the output section, specify the connection details for influxdb:\n\n  [output]\n  name             = \"influx_1\"\ntype             = \"influxdb\"\nhost             = \"127.0.0.1\"\nport             = 8086\nprotocol         = \"http\"\nusername         = \"\"\npassword         = \"\"\ndatabase         = \"test\"\nfailoverTimeout  = 10000     # Time after which the logger will reconnect\nbufferMaxSize    = 64        # Max size of the local db in MB. TODO.\nwriteInterval    = 3000      # Interval of batch writes.\nwriteMaxPoints   = 1000      # Max point per POST request.\nThen, for each OPC value you want to log, repeat the following in the config file, d:\n\n# A polled node:\n[[measurements]]\nname               = \"Int32polled\"\ntags               = { tag1 = \"test\", tag2 = \"AB43\" }\nnodeId             = \"ns=2;i=10849\"\ncollectionType     = \"polled\"\npollRate           = 20     # samples / minute.\ndeadbandAbsolute   = 0      # Absolute max difference for a value not to be collected\ndeadbandRelative   = 0.0    # Relative max difference for a value not to be collected\n\n# A monitored node\n[[measurements]]\nname               = \"Int32monitored\"\ntags               = { tag1 = \"test\", tag2 = \"AB43\" }\nnodeId             = \"ns=2;i=10849\"\ncollectionType     = \"monitored\"\nmonitorResolution  = 1000    # ms \nkind: ConfigMap\n"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"config-opc","namespace":"default"}}
+  creationTimestamp: "2020-03-06T18:36:00Z"
+  name: config-opc
+  namespace: default
+  resourceVersion: "37229959"
+  selfLink: /api/v1/namespaces/default/configmaps/config-opc
+  uid: 53d146da-5fd9-11ea-a9a4-42010a8001d2

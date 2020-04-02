@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "2"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"nfs-server","namespace":"default"},"spec":{"replicas":1,"selector":{"matchLabels":{"role":"nfs-server"}},"template":{"metadata":{"labels":{"role":"nfs-server"}},"spec":{"containers":[{"image":"gcr.io/google_containers/volume-nfs:0.8","name":"nfs-server","ports":[{"containerPort":2049,"name":"nfs"},{"containerPort":20048,"name":"mountd"},{"containerPort":111,"name":"rpcbind"}],"securityContext":{"privileged":true},"volumeMounts":[{"mountPath":"/exports","name":"filesuploaded"}]}],"volumes":[{"gcePersistentDisk":{"fsType":"ext4","pdName":"nfs-uploaded-files"},"name":"filesuploaded"}]}}}}
+  creationTimestamp: "2020-01-27T16:20:42Z"
+  generation: 2
+  name: nfs-server
+  namespace: default
+  resourceVersion: "22361401"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/nfs-server
+  uid: f6a7b5b7-4120-11ea-b184-42010a800163
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      role: nfs-server
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        role: nfs-server
+    spec:
+      containers:
+      - image: gcr.io/google_containers/volume-nfs:0.8
+        imagePullPolicy: IfNotPresent
+        name: nfs-server
+        ports:
+        - containerPort: 2049
+          name: nfs
+          protocol: TCP
+        - containerPort: 20048
+          name: mountd
+          protocol: TCP
+        - containerPort: 111
+          name: rpcbind
+          protocol: TCP
+        resources: {}
+        securityContext:
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /exports
+          name: filesuploaded
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - gcePersistentDisk:
+          fsType: ext4
+          pdName: nfs-uploaded-files
+        name: filesuploaded
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2020-01-27T16:27:30Z"
+    lastUpdateTime: "2020-01-27T16:27:30Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2020-01-27T16:20:42Z"
+    lastUpdateTime: "2020-01-27T16:27:30Z"
+    message: ReplicaSet "nfs-server-85c85fbdff" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 2
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

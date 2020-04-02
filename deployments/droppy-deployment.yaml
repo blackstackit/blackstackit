@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "6"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"droppy","namespace":"default"},"spec":{"replicas":1,"selector":{"matchLabels":{"role":"droppy"}},"template":{"metadata":{"labels":{"role":"droppy"}},"spec":{"containers":[{"image":"privyplace/droppy","name":"droppy","volumeMounts":[{"mountPath":"/files/data","name":"nfs-pvc"}]}],"volumes":[{"name":"nfs-pvc","persistentVolumeClaim":{"claimName":"nfs"}}]}}}}
+  creationTimestamp: "2020-01-27T20:51:02Z"
+  generation: 6
+  name: droppy
+  namespace: default
+  resourceVersion: "27422700"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/droppy
+  uid: baf3f07a-4146-11ea-b184-42010a800163
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      role: droppy
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        role: droppy
+    spec:
+      containers:
+      - image: silverwind/droppy
+        imagePullPolicy: Always
+        name: droppy
+        resources: {}
+        securityContext:
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /files
+          name: nfs-pvc
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: nfs-pvc
+        persistentVolumeClaim:
+          claimName: nfs
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2020-01-27T20:51:02Z"
+    lastUpdateTime: "2020-01-27T21:24:34Z"
+    message: ReplicaSet "droppy-864dbc6448" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2020-02-11T16:04:02Z"
+    lastUpdateTime: "2020-02-11T16:04:02Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 6
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
